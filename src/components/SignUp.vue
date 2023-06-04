@@ -21,6 +21,7 @@
           <input
             type="text"
             id="large-input"
+            v-model="fName"
             class="block md:w-[500px] w-[200px] md:h-[50px] h-[30px] p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           />
           <label
@@ -30,6 +31,7 @@
           >
           <input
             type="text"
+            v-model="lName"
             id="large-input"
             class="block md:w-[500px] w-[200px] md:h-[50px] h-[30px] p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           />
@@ -41,6 +43,7 @@
 
           <input
             type="text"
+            v-model="username"
             id="large-input"
             class="block md:w-[500px] w-[200px] p-4 md:h-[50px] h-[30px] text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           />
@@ -51,12 +54,15 @@
             >Password</label
           >
           <input
+            v-model="password"
             type="text"
             id="small-input"
             class="block md:w-[500px] w-[200px] md:h-[50px] h-[30px] p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           />
           <button
-            class="bg-transparent hover:bg-orange-500 mt-10 rounded-2xl text-orange-700 font-semibold hover:text-white py-2 px-4 border border-orange-500 hover:border-transparent w-[240px]"
+            class="bg-transparent hover:bg-orange-500 mt-10 rounded-2xl disabled:bg-slate-400 disabled:text-black disabled:border-black text-orange-700 font-semibold hover:text-white py-2 px-4 border border-orange-500 hover:border-transparent w-[240px]"
+            :disabled="isButtonDisabled"
+            @click="handleChange"
           >
             Signup
           </button>
@@ -71,9 +77,24 @@ export default {
   name: "SignUp",
   data() {
     return {
-      imageUrl:
-        "https://s3.brilliant.com.bd/tahsin/kheyaPortfolio/T-removebg-preview.png", // Replace with your image URL
+      fName: "",
+      lName: "",
+      username: "",
+      password: "",
     };
+  },
+  methods: {
+    handleChange() {
+      console.log(this.fName);
+      console.log(this.lName);
+      console.log(this.username);
+      console.log(this.password);
+    },
+  },
+  computed: {
+    isButtonDisabled() {
+      return !this.fName || !this.lName || !this.username || !this.password;
+    },
   },
 };
 </script>
