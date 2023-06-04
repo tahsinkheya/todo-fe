@@ -1,5 +1,5 @@
 <template>
-  <div className="h-[100vh] w-[100vw] bg-login bg-cover">
+  <div className="h-[100vh] w-[100vw] bg-login bg-cover relative">
     <div>
       <Alert :message="message" :type="type" :show="show" />
       <div className="grid grid-cols-1 md:grid-cols-2">
