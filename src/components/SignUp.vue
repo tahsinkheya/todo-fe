@@ -85,10 +85,19 @@ export default {
   },
   methods: {
     handleChange() {
-      console.log(this.fName);
-      console.log(this.lName);
-      console.log(this.username);
-      console.log(this.password);
+      let data = {
+        first_name: this.fName,
+        last_name: this.lName,
+        password: this.password,
+        username: this.username,
+      };
+      signup(data)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
   computed: {
