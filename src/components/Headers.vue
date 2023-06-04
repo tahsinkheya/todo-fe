@@ -40,10 +40,11 @@
             Login
           </button>
           <p className="pt-5">
-            Don't have an account?<span
-              className="text-orange-800 hover:underline cursor-pointer"
-            >
-              Create your account now ↦</span
+            Don't have an account?
+            <router-link
+              to="/signup"
+              class="text-orange-800 hover:underline cursor-pointer"
+              >Create your account now ↦</router-link
             >
           </p>
         </div>

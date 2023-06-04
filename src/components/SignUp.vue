@@ -10,7 +10,7 @@
           <p
             className="text-3xl font-poppins font-extrabold text-gradient-orange-red pb-5"
           >
-            My TODO Tracker
+            Sign Up
           </p>
           <label
             for="small-input"
