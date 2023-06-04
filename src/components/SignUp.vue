@@ -1,6 +1,7 @@
 <template>
   <div className="h-[100vh] w-[100vw] bg-login bg-cover">
     <div>
+      <Alert :message="message" :type="type" :show="show" />
       <div className="grid grid-cols-1 md:grid-cols-2">
         <div classname="col-span-1 hidden md:block"></div>
         <div
@@ -66,6 +67,14 @@
           >
             Signup
           </button>
+          <p className="pt-5">
+            Already have an account?
+            <router-link
+              to="/"
+              class="text-orange-800 hover:underline cursor-pointer"
+              >Sign in to your account now ↦</router-link
+            >
+          </p>
         </div>
       </div>
     </div>
@@ -73,7 +82,10 @@
 </template>
 
 <script>
+import Alert from "../assets/common/Alert.vue";
+import { signup } from "../api/todoApis";
 export default {
+  components: { Alert },
   name: "SignUp",
   data() {
     return {
@@ -81,22 +93,51 @@ export default {
       lName: "",
       username: "",
       password: "",
+      message: "",
+      type: "",
+      show: false,
     };
   },
   methods: {
+    clearAll() {
+      this.fName = "";
+      this.lName = "";
+      this.password = "";
+      this.username = "";
+    },
     handleChange() {
       let data = {
-        first_name: this.fName,
         last_name: this.lName,
+        first_name: this.fName,
         password: this.password,
         username: this.username,
       };
       signup(data)
         .then((res) => {
+          this.show = true;
+          this.type = "success";
+          this.clearAll();
+          this.message = res.data.message;
+          const interval = setInterval(() => {
+            this.show = false;
+            clearInterval();
+          }, 4000);
+
           console.log(res);
         })
         .catch((err) => {
-          console.log(err);
+          this.show = true;
+          this.type = "error";
+          this.clearAll();
+
+          this.message = err.response.data.message;
+          const interval = setInterval(() => {
+            this.show = false;
+
+            clearInterval();
+          }, 3000);
+
+          console.log(err.response);
         });
     },
   },
