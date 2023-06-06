@@ -1,7 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory } from "vue-router";
 import Headers from "../components/Headers.vue";
 import SignUp from "../components/SignUp.vue";
 import Tasks from "../components/Tasks.vue";
+import Dashboard from "../components/Dashboard.vue";
 import { isLoggedIn } from "../utils/auth";
 
 const routes = [
@@ -19,6 +20,18 @@ const routes = [
     name: "Tasks",
     path: "/tasks",
     component: Tasks,
+    beforeEnter: (to, from, next) => {
+      if (isLoggedIn()) {
+        next();
+      } else {
+        next("/");
+      }
+    },
+  },
+  {
+    name: "Dashboard",
+    path: "/dashboard",
+    component: Dashboard,
     beforeEnter: (to, from, next) => {
       if (isLoggedIn()) {
         next();

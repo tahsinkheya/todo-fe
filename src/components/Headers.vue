@@ -78,7 +78,12 @@ export default {
         "https://s3.brilliant.com.bd/tahsin/kheyaPortfolio/T-removebg-preview.png", // Replace with your image URL
     };
   },
-
+  mounted() {
+    let token = localStorage.getItem("jwt_token");
+    if (token) {
+      this.$router.push("/dashboard");
+    }
+  },
   methods: {
     handleChange() {
       login({ username: this.username, password: this.password })
@@ -92,7 +97,7 @@ export default {
             clearInterval();
           }, 5000);
           localStorage.setItem("jwt_token", res.data.auth_token);
-          this.$router.push("/tasks");
+          this.$router.push("/dashboard");
         })
         .catch((err) => {
           this.show = true;

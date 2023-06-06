@@ -10,7 +10,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   (config) => {
-    const jwt_token = localStorage.getItem("auth_token");
+    const jwt_token = localStorage.getItem("jwt_token");
     if (jwt_token) {
       config.headers["Authorization"] = "Bearer " + jwt_token;
     }
@@ -27,10 +27,11 @@ instance.interceptors.response.use(
   },
   (error) => {
     if (error?.response?.status === 401) {
-      const jwt_token_decode = jwtDecode(localStorage.getItem("auth_token"));
+      const jwt_token_decode = jwtDecode(localStorage.getItem("jwt_token"));
+      console.log(jwt_token_decode)
       const currentTime = Date.now() / 1000;
       if (jwt_token_decode.exp <= currentTime) {
-        localStorage.setItem("logged_out", "true");
+        localStorage.removeItem("jwt_token");
         // logout()
       }
     } else {
