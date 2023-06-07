@@ -5,3 +5,7 @@ export const isLoggedIn = () => {
   }
   return false;
 };
+
+export const logout = () => {
+  localStorage.removeItem("jwt_token");
+};

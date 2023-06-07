@@ -18,8 +18,18 @@ export function getUserInfo(data) {
   return execute.post(`${API_BASE_URL}/user_info/get-user-info`, data);
 }
 
+export function addTask(data) {
+  console.log(data);
+  return execute.post(`${API_BASE_URL}/tasks/add-task`, data);
+}
+
 export function getAllTasks(data) {
   return execute.post(`${API_BASE_URL}/tasks/get-tasks`, data);
+}
+
+export function getAllProjects(data) {
+  console.log(data);
+  return execute.post(`${API_BASE_URL}/projects/get-projects`, data);
 }
 
 export function addProject(data) {

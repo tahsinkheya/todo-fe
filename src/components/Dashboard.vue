@@ -1,9 +1,9 @@
 <template>
   <div class="h-[100vh] w-[100vw] bg-primary bg-cover p-5">
-      <Alert :message="message" :type="type" :show="show" />
+    <Alert :message="message" :type="type" :show="show" />
 
     <h1
-      class="flex items-center justify-center pb-4 text-4xl font-bold bg-gradient-to-r from-orange-500 via-pink-500 to-red-500 text-transparent bg-clip-text"
+      class="flex items-center justify-center pb-4 text-4xl font-bold bg-gradient-to-r from-orange-500 to-red-500 text-transparent bg-clip-text"
     >
       Dashboard
     </h1>
@@ -12,15 +12,27 @@
         class="md:max-w-[1000px] flex flex-col items-center justify-center w-auto"
       >
         <div
-          class="flex flex-col items-center justify-center bg-orange-300 md:w-[1000px] w-[100vw]"
+          class="flex flex-col items-center justify-center p-10 border-1 border-orange-300 md:w-[1000px] w-[100vw]"
         >
-          <div class="p-10">
+          <img :src="imgUrl" className="w-[400px]" />
+          <div class="flex flex-col items-center justify-center">
             <h1 class="text-2xl md:text-3xl font-poppins">
-              Hello, {{ this.fname }}
+              Hello,
+              <span class="text-3xl font-extrabold text-orange-500">
+                {{ this.fname }}</span
+              >
             </h1>
-            <br />
-            <h1 class="text-2xl md:text-2xl font-sans block">
+
+            <h1 class="text-2xl md:text-2xl font-sans block italic">
               {{ getDate() }}
+            </h1>
+            <h1 class="text-2xl md:text-2xl font-sans">
+              You have
+              <span
+                class="text-xl md:text-3xl font-extrabold text-orange-500"
+                >{{ numTask }}</span
+              >
+              {{ numTask < 2 ? "task" : "tasks" }} in progress
             </h1>
           </div>
         </div>
@@ -47,7 +59,8 @@
             <p class="text-orange-500 text-2xl md:text-3xl pt-4">Add Project</p>
           </div>
           <div
-            class="border-4 border-orange-500 hover:border-orange-800 rounded-2xl p-4 flex flex-col items-center justify-center hover:bg-orange-100"
+            @click="addTask"
+            class="border-4 border-orange-500 hover:border-orange-800 cursor-pointer rounded-2xl p-4 flex flex-col items-center justify-center hover:bg-orange-100"
           >
             <svg
               class="w-10 h-10 hover:text-orange-800 text-orange-500"
@@ -71,6 +84,11 @@
         :setShow="setShow"
         :showAlert="showAlert"
       />
+      <AddTask
+        :show="showAddTask"
+        :setShow="setShowTask"
+        :showAlert="showAlert"
+      />
     </div>
   </div>
 </template>
@@ -78,16 +96,17 @@
 
 <script>
 import jwtDecode from "jwt-decode";
-import { getUserInfo } from "../api/todoApis";
+import { getAllTasks, getUserInfo } from "../api/todoApis";
 import Addproject from "../components/dashboard/AddProject.vue";
+import AddTask from "../components/dashboard/AddTask.vue";
 import Alert from "../assets/common/Alert.vue";
 
 export default {
   name: "Dashboard",
-  components: { Alert, Addproject },
+  components: { Alert, Addproject, AddTask },
   data() {
     return {
-      showAddProj: true,
+      showAddProj: false,
       showAddTask: false,
       fname: "",
       pName: "",
@@ -95,12 +114,18 @@ export default {
       message: "",
       desc: "",
       show: false,
+      numTask: 0,
+      imgUrl:
+        "https://s3.brilliant.com.bd/tahsin/todo%2520app/Statistics-removebg-preview.png",
     };
   },
 
   methods: {
     setShow() {
       this.showAddProj = false;
+    },
+    setShowTask() {
+      this.showAddTask = false;
     },
     showAlert(message, type) {
       this.type = type;
@@ -113,7 +138,6 @@ export default {
     },
     getDate() {
       const today = new Date();
-
       const year = today.getFullYear();
       const month = today.getMonth() + 1; // Note: Months are zero-based, so we add 1
       const day = today.getDate();
@@ -126,6 +150,9 @@ export default {
     addProject() {
       this.showAddProj = true;
     },
+    addTask() {
+      this.showAddTask = true;
+    },
   },
 
   mounted() {
@@ -134,6 +161,15 @@ export default {
     })
       .then((res) => {
         this.fname = res.data.data["first_name"];
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    getAllTasks({
+      username: jwtDecode(localStorage.getItem("jwt_token")).username,
+    })
+      .then((res) => {
+        this.numTask = res.data.data.length;
       })
       .catch((err) => {
         console.log(err);

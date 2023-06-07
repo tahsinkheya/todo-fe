@@ -14,7 +14,7 @@
             class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600"
           >
             <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-              Add Project
+              Add New Task
             </h3>
             <button
               type="button"
@@ -41,19 +41,19 @@
             <label
               for="small-input"
               class="block mb-2 text-xl font-medium text-gray-900 dark:text-white"
-              >Project Name</label
+              >Title</label
             >
 
             <input
               type="text"
-              v-model="pName"
+              v-model="title"
               id="large-input"
               class="block md:w-[500px] w-[200px] md:h-[50px] h-[30px] p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
             <label
               for="small-input"
               class="block mb-2 text-xl font-medium text-gray-900 dark:text-white"
-              >Project Description</label
+              >Description</label
             >
 
             <input
@@ -62,6 +62,27 @@
               id="large-input"
               class="block md:w-[500px] w-[200px] md:h-[50px] h-[30px] p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
+
+            <label
+              for="small-input"
+              class="block mb-2 text-xl font-medium text-gray-900 dark:text-white"
+              >Project</label
+            >
+
+            <select
+              id="project"
+              v-model="selected_proj"
+              class="bg-gray-50 border w-[200px] md:w-[500px] md:h-[50px] h-[30px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="">Select an option</option>
+              <option
+                v-for="item in projects"
+                :value="item.project_id"
+                :key="item.project_id"
+              >
+                {{ item.name }}
+              </option>
+            </select>
           </div>
           <!-- Modal footer -->
           <div
@@ -72,7 +93,7 @@
               :disabled="isButtonDisabled"
               type="button"
               @click="handleClick"
-              class="text-black bg-orange-300 hover:bg-orange-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-blue-800"
+              class="text-black bg-orange-300 disabled:bg-slate-300 hover:bg-orange-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-blue-800"
             >
               Confirm
             </button>
@@ -92,12 +113,13 @@
 </template>
 
 <script>
-import jwtDecode from "jwt-decode";
-import { addProject } from "../../api/todoApis";
+import { addTask, getAllProjects } from "../../api/todoApis";
 import Alert from "../../assets/common/Alert.vue";
+import jwtDecode from "jwt-decode";
+
 export default {
   components: { Alert },
-  name: "Addproject",
+  name: "AddTask",
   props: {
     show: { type: Boolean },
     setShow: { type: Function },
@@ -106,24 +128,27 @@ export default {
   computed: {
     isButtonDisabled() {
       console.log(this.showModal);
-      return !this.desc || !this.pName;
+      return !this.desc || !this.title || !this.selected_proj;
     },
   },
   data() {
     return {
-      pName: "",
+      title: "",
       desc: "",
       message: "",
       type: "",
       showModal: false,
+      selected_proj: "",
+      projects: [],
       // Replace with your image URL
     };
   },
   methods: {
     handleClick() {
-      addProject({
-        project_name: this.pName,
-        project_desc: this.desc,
+      addTask({
+        title: this.title,
+        description: this.desc,
+        project_id: this.selected_proj,
         username: jwtDecode(localStorage.getItem("jwt_token")).username,
       })
         .then((res) => {
@@ -138,7 +163,7 @@ export default {
           this.type = "error";
           this.desc = "";
           this.setShow();
-          this.showAlert(err.response.data.message, "errpr");
+          this.showAlert(err.response.data.message, "error");
         });
     },
   },
@@ -146,6 +171,18 @@ export default {
     show(newVal) {
       this.showModal = newVal;
     },
+  },
+  mounted() {
+    getAllProjects({
+      username: jwtDecode(localStorage.getItem("jwt_token")).username,
+    })
+      .then((res) => {
+        this.projects = res.data.data;
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
 };
 </script>

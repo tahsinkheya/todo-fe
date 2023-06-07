@@ -1,6 +1,6 @@
 import axios from "axios";
 import jwtDecode from "jwt-decode";
-// import { logout } from "./auth"
+import { logout } from "../utils/auth"
 
 const instance = axios.create({
   headers: {
@@ -32,7 +32,7 @@ instance.interceptors.response.use(
       const currentTime = Date.now() / 1000;
       if (jwt_token_decode.exp <= currentTime) {
         localStorage.removeItem("jwt_token");
-        // logout()
+        logout()
       }
     } else {
       throw error;
