@@ -1,9 +1,9 @@
-<template>
-  <div class="h-[100vh] w-[100vw] bg-primary bg-cover p-5">
+<template >
+  <div class="w-[100vw] bg-primary bg-cover min-h-[100vh]">
     <Alert :message="message" :type="type" :show="show" />
 
     <h1
-      class="flex items-center justify-center pb-4 text-4xl font-bold bg-gradient-to-r from-orange-500 to-red-500 text-transparent bg-clip-text"
+      class="flex items-center justify-center text-4xl font-bold bg-gradient-to-r from-orange-500 to-red-500 text-transparent bg-clip-text"
     >
       Dashboard
     </h1>
@@ -12,7 +12,7 @@
         class="md:max-w-[1000px] flex flex-col items-center justify-center w-auto"
       >
         <div
-          class="flex flex-col items-center justify-center p-10 border-1 border-orange-300 md:w-[1000px] w-[100vw]"
+          class="flex flex-col items-center justify-center p-10 pt-0 border-1 border-orange-300 md:w-[1000px] w-[100vw]"
         >
           <img :src="imgUrl" className="w-[400px]" />
           <div class="flex flex-col items-center justify-center">
@@ -37,7 +37,7 @@
           </div>
         </div>
         <div
-          class="grid md:grid-cols-4 gap-3 gid-cols-2 items-center justify-center pt-4"
+          class="grid md:grid-cols-4 gap-3 gid-cols-2 pb-6 items-center justify-center pt-4"
         >
           <div class="col-span-1 hidden md:block"></div>
           <div
@@ -78,17 +78,22 @@
           </div>
           <div class="col-span-1 hidden md:block"></div>
         </div>
+        <Addproject
+          :show="showAddProj"
+          :setShow="setShow"
+          :showAlert="showAlert"
+        />
+        <AddTask
+          :show="showAddTask"
+          :setShow="setShowTask"
+          :showAlert="showAlert"
+        />
+        <div class="grid grid-cols-1 md:gap-2 md:grid-cols-2 w-full">
+          <ViewProjects :setProjId="(id) => setProjId(id)" />
+
+          <ViewTasks :projId="projId" />
+        </div>
       </div>
-      <Addproject
-        :show="showAddProj"
-        :setShow="setShow"
-        :showAlert="showAlert"
-      />
-      <AddTask
-        :show="showAddTask"
-        :setShow="setShowTask"
-        :showAlert="showAlert"
-      />
     </div>
   </div>
 </template>
@@ -100,10 +105,11 @@ import { getAllTasks, getUserInfo } from "../api/todoApis";
 import Addproject from "../components/dashboard/AddProject.vue";
 import AddTask from "../components/dashboard/AddTask.vue";
 import Alert from "../assets/common/Alert.vue";
-
+import ViewProjects from "../components/ViewProjects.vue";
+import ViewTasks from "../components/ViewTasks.vue";
 export default {
   name: "Dashboard",
-  components: { Alert, Addproject, AddTask },
+  components: { ViewTasks, Alert, Addproject, AddTask, ViewProjects },
   data() {
     return {
       showAddProj: false,
@@ -115,6 +121,7 @@ export default {
       desc: "",
       show: false,
       numTask: 0,
+      projId: 0,
       imgUrl:
         "https://s3.brilliant.com.bd/tahsin/todo%2520app/Statistics-removebg-preview.png",
     };
@@ -123,6 +130,10 @@ export default {
   methods: {
     setShow() {
       this.showAddProj = false;
+    },
+    setProjId(id) {
+      console.log(id);
+      this.projId = id;
     },
     setShowTask() {
       this.showAddTask = false;
