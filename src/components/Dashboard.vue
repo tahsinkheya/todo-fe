@@ -89,9 +89,12 @@
           :showAlert="showAlert"
         />
         <div class="grid grid-cols-1 md:gap-2 md:grid-cols-2 w-full">
-          <ViewProjects :setProjId="(id) => setProjId(id)" />
+          <ViewProjects
+            :setProjId="(id) => setProjId(id)"
+            :refetch="projRefresh"
+          />
 
-          <ViewTasks :projId="projId" />
+          <ViewTasks :projId="projId" :refetch="tasksRefresh" />
         </div>
       </div>
     </div>
@@ -119,6 +122,8 @@ export default {
       type: "",
       message: "",
       desc: "",
+      tasksRefresh: 0,
+      projRefresh: 0,
       show: false,
       numTask: 0,
       projId: 0,
@@ -130,6 +135,7 @@ export default {
   methods: {
     setShow() {
       this.showAddProj = false;
+      this.projRefresh = Math.random();
     },
     setProjId(id) {
       console.log(id);
@@ -137,6 +143,7 @@ export default {
     },
     setShowTask() {
       this.showAddTask = false;
+      this.tasksRefresh = Math.random();
     },
     showAlert(message, type) {
       this.type = type;

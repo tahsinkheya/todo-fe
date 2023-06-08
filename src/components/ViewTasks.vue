@@ -44,7 +44,7 @@ export default {
     refetch: { type: Number },
   },
   mounted() {
-    fetchData();
+    this.fetchData();
   },
   methods: {
     formatDate(dateString) {
@@ -54,18 +54,28 @@ export default {
 
       return formattedDate;
     },
-  },
-  fetchData() {
-    getAllTasks({
-      username: jwtDecode(localStorage.getItem("jwt_token")).username,
-    })
-      .then((res) => {
-        this.tasks = res.data.data;
-        console.log(res);
+    fetchData() {
+      getAllTasks({
+        username: jwtDecode(localStorage.getItem("jwt_token")).username,
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((res) => {
+          this.tasks = res.data.data;
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  },
+  watch: {
+    refetch: {
+      immediate: true,
+      handler(newRefetch, oldRefetch) {
+        if (newRefetch !== oldRefetch) {
+          this.fetchData();
+        }
+      },
+    },
   },
 };
 </script>

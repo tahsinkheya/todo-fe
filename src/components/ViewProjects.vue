@@ -10,7 +10,11 @@
       <div class="w-full pb-3" v-for="p in projects" :key="p.project_id">
         <div
           @click="onClick(p.project_id)"
-          class="rounded-lg p-5 cursor-pointer bg-slate-300 flex flex-col justify-center items-center"
+          :class="{
+            'rounded-lg p-5 bg-slate-300': p.project_id !== projId,
+            'rounded-lg p-5 bg-orange-100': p.project_id === projId,
+          }"
+          class="flex flex-col justify-center items-center cursor-pointer"
         >
           <img :src="imgUrl" className="w-[40px]" />
 
@@ -30,26 +34,16 @@ export default {
   data() {
     return {
       projects: [],
+      projId: 0,
       imgUrl: "https://s3.brilliant.com.bd/tahsin/todo%2520app/5956592.png",
     };
   },
   props: {
     setProjId: { type: Function },
+    refetch: { type: Number },
   },
   name: "ViewProjects",
 
-  mounted() {
-    getAllProjects({
-      username: jwtDecode(localStorage.getItem("jwt_token")).username,
-    })
-      .then((res) => {
-        this.projects = res.data.data;
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  },
   methods: {
     formatDate(dateString) {
       const date = new Date(dateString);
@@ -59,7 +53,33 @@ export default {
       return formattedDate;
     },
     onClick(id) {
+      this.projId = id;
       this.setProjId(id);
+    },
+    fetchData() {
+      getAllProjects({
+        username: jwtDecode(localStorage.getItem("jwt_token")).username,
+      })
+        .then((res) => {
+          this.projects = res.data.data;
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  },
+  mounted() {
+    this.fetchData();
+  },
+  watch: {
+    refetch: {
+      immediate: true,
+      handler(newRefetch, oldRefetch) {
+        if (newRefetch !== oldRefetch) {
+          this.fetchData();
+        }
+      },
     },
   },
 };
