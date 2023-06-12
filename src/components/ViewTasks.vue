@@ -18,7 +18,7 @@
           <h1>{{ p.description }}</h1>
           <button
             v-if="p.status === 'open'"
-            class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+            class="bg-transparent mt-2 hover:bg-orange-500 text-orange-700 font-semibold hover:text-white py-2 px-4 border border-orange-500 hover:border-transparent rounded"
           >
             Complete
           </button>
