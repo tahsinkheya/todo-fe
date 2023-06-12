@@ -1,6 +1,5 @@
 <template>
   <!-- Main modal -->
-
   <div :class="{ block: show, hidden: !show }">
     <div
       tabIndex="-1"
@@ -153,13 +152,14 @@ export default {
       })
         .then((res) => {
           this.showAlert(res.data.message, "success");
+          this.title = "";
           this.pName = "";
           this.setShow();
           this.desc = "";
         })
         .catch((err) => {
           console.log(err);
-          this.pName = "";
+          this.title = "";
           this.type = "error";
           this.desc = "";
           this.setShow();

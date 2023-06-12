@@ -21,17 +21,9 @@
               >
             </h1>
 
-            <!-- <h1 class="text-2xl md:text-2xl font-sans">
-              You have
-              <span
-                class="text-xl md:text-3xl font-extrabold text-orange-500"
-                >{{ numTask }}</span
-              >
-              {{ numTask < 2 ? "task" : "tasks" }} in progress
-            </h1> -->
             <div class="grid grid-cols-2 gap-2 pt-3">
               <span
-                class="bg-gray-100 text-orange-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2 border-orange-800 border"
+                class="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2 border-green-800 border"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -44,7 +36,7 @@
                 </svg>
                 {{ completed }} completed </span
               ><span
-                class="bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
+                class="bg-orange-100 text-orange-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded border-orange-800 border"
               >
                 <svg
                   aria-hidden="true"
@@ -126,7 +118,11 @@
             :refetch="projRefresh"
           />
 
-          <ViewTasks :projId="projId" :refetch="tasksRefresh" />
+          <ViewTasks
+            :projId="projId"
+            :refetch="tasksRefresh"
+            :showAlert="showAlert"
+          />
         </div>
       </div>
     </div>
@@ -184,7 +180,6 @@ export default {
       this.projRefresh = Math.random();
     },
     setProjId(id) {
-      console.log(id);
       this.projId = id;
     },
     setShowTask() {
@@ -198,7 +193,7 @@ export default {
       const interval = setInterval(() => {
         this.show = false;
         clearInterval();
-      }, 3000);
+      }, 5000);
     },
     getDate() {
       const daysOfWeek = [

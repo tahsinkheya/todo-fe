@@ -11,6 +11,7 @@
     "axios": "^1.4.0",
     "jwt-decode": "^3.1.2",
     "vue": "^3.3.4",
+    "vue-confetti-explosion": "^1.0.2",
     "vue-router": "^4.2.2"
   },
   "devDependencies": {
