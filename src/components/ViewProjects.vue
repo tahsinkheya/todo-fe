@@ -14,13 +14,17 @@
             'rounded-lg p-5 bg-slate-300': p.project_id !== projId,
             'rounded-lg p-5 bg-orange-100': p.project_id === projId,
           }"
-          class="flex flex-col justify-center items-center cursor-pointer"
+          class="grid grid-cols-3 gap-1 cursor-pointer"
         >
-          <img :src="imgUrl" className="w-[40px]" />
+          <div class="flex justify-center items-center">
+            <img :src="imgUrl" className="h-[5vh] " />
+          </div>
 
-          <h1 class="font-bold font-serif text-xl">{{ p.name }}</h1>
-          <h1>{{ p.description }}</h1>
-          <h1>Added on: {{ formatDate(p.created_at) }}</h1>
+          <div class="col-span-2">
+            <h1 class="font-bold font-serif text-xl">{{ p.name }}</h1>
+            <h1>{{ p.description }}</h1>
+            <h1>Added on: {{ formatDate(p.created_at) }}</h1>
+          </div>
         </div>
       </div>
     </div>
@@ -35,7 +39,8 @@ export default {
     return {
       projects: [],
       projId: 0,
-      imgUrl: "https://s3.brilliant.com.bd/tahsin/todo%2520app/5956592.png",
+      imgUrl:
+        "https://s3.brilliant.com.bd/tahsin/todo%2520app/calendar%20%281%29.png",
     };
   },
   props: {
